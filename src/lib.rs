@@ -5,13 +5,7 @@
  * Find the sum of all the multiples of 3 or 5 below 1000.
  */
 pub fn problem_0001(n: u32) -> u32 {
-    let mut sum = 0;
-    for k in 1..n {
-        if k % 3 == 0 || k % 5 == 0 {
-            sum += k
-        }
-    }
-    return sum;
+    return (1..n).filter(|k| k % 3 == 0 || k % 5 == 0).sum();
 }
 
 /**

@@ -1,26 +1,32 @@
+extern crate num_traits;
+
+use num_traits::One;
+use std::mem;
+use std::ops::Add;
+
 /// Fibonacci infinite sequence iterator.
-pub struct Fibonacci {
-    current: u32,
-    next: u32,
+pub struct Fibonacci<T> {
+    current: T,
+    next: T,
 }
 
-impl Fibonacci {
-    pub fn new() -> Fibonacci {
+impl<T: One> Fibonacci<T> {
+    pub fn new() -> Fibonacci<T> {
         Fibonacci {
-            current: 0,
-            next: 1,
+            current: One::one(),
+            next: One::one(),
         }
     }
 }
 
-impl Iterator for Fibonacci {
-    type Item = u32;
+impl<T: Add<T, Output = T> + Clone> Iterator for Fibonacci<T> {
+    type Item = T;
 
     /// next always returns a value, as this iterator is infinite.
-    fn next(&mut self) -> Option<u32> {
-        let new_next = self.current + self.next;
-        self.current = self.next;
-        self.next = new_next;
-        Some(self.current)
+    fn next(&mut self) -> Option<T> {
+        let new_next = self.current.clone() + self.next.clone();
+        let new_current = mem::replace(&mut self.next, new_next);
+        let current = mem::replace(&mut self.current, new_current);
+        Some(current)
     }
 }

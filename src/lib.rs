@@ -37,7 +37,7 @@ pub fn problem_0002_imperative(n: u32) -> u32 {
 }
 
 pub fn problem_0002_functional(n: u32) -> u32 {
-    Fibonacci::new()
+    Fibonacci::<u32>::new()
         .take_while(|&k| k < n)
         .filter(|&k| k.is_even())
         .sum()

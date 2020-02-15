@@ -1,3 +1,10 @@
+extern crate num_integer;
+
+mod iterators;
+
+use iterators::Fibonacci;
+use num_integer::Integer;
+
 /**
  * Problem 1: Multiples of 3 and 5
  * If we list all the natural numbers below 10 that are multiples of 3 or 5, we
@@ -14,7 +21,7 @@ pub fn problem_0001(n: u32) -> u32 {
  *     1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
  * By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
  */
-pub fn problem_0002(n: u32) -> u32 {
+pub fn problem_0002_imperative(n: u32) -> u32 {
     let (mut i, mut j) = (0, 1);
     let mut fibo = i + j;
     let mut even_sum = 0;
@@ -29,6 +36,13 @@ pub fn problem_0002(n: u32) -> u32 {
     return even_sum;
 }
 
+pub fn problem_0002_functional(n: u32) -> u32 {
+    Fibonacci::new()
+        .take_while(|&k| k < n)
+        .filter(|&k| k.is_even())
+        .sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -36,8 +50,10 @@ mod tests {
     fn test_problem_0001() {
         assert_eq!(problem_0001(1000), 233168);
     }
+
     #[test]
     fn test_problem_0002() {
-        assert_eq!(problem_0002(4_000_000), 4613732);
+        assert_eq!(problem_0002_imperative(4_000_000), 4613732);
+        assert_eq!(problem_0002_functional(4_000_000), 4613732);
     }
 }

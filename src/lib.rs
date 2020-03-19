@@ -3,7 +3,9 @@ extern crate num_integer;
 mod iterators;
 
 use iterators::Fibonacci;
+use iterators::Primes;
 use num_integer::Integer;
+use std::cmp;
 
 /**
  * Problem 1: Multiples of 3 and 5
@@ -43,6 +45,32 @@ pub fn problem_0002_functional(n: u32) -> u32 {
         .sum()
 }
 
+/**
+ * Problem 3: Largest prime factor
+ * The prime factors of 13195 are 5, 7, 13 and 29.
+ * What is the largest prime factor of the number 600851475143 ?
+ */
+pub fn problem_0003(n: u64) -> u64 {
+    let mut k = n;
+    let mut largest = 1;
+    let mut primes = Primes::new(n);
+    loop {
+        match primes.next() {
+            Some(prime) => {
+                while k != 1 && k % prime == 0 {
+                    k = k / prime;
+                    largest = prime;
+                }
+                if k == 1 {
+                    break;
+                }
+            }
+            None => break,
+        }
+    }
+    return cmp::max(largest, k);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -55,5 +83,11 @@ mod tests {
     fn test_problem_0002() {
         assert_eq!(problem_0002_imperative(4_000_000), 4613732);
         assert_eq!(problem_0002_functional(4_000_000), 4613732);
+    }
+
+    #[test]
+    fn test_problem_0003() {
+        assert_eq!(problem_0003(13_195), 29);
+        assert_eq!(problem_0003(600_851_475_143), 6857);
     }
 }

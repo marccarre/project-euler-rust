@@ -1,10 +1,14 @@
+extern crate itertools;
 extern crate num_integer;
 
 mod iterators;
+mod numbers;
 
 use iterators::Fibonacci;
 use iterators::Primes;
+use itertools::Itertools;
 use num_integer::Integer;
+use numbers::is_palindrome;
 use std::cmp;
 
 /**
@@ -71,6 +75,33 @@ pub fn problem_0003(n: u64) -> u64 {
     return cmp::max(largest, k);
 }
 
+/**
+ * Problem 4: Largest palindrome product
+ * A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+ * Find the largest palindrome made from the product of two 3-digit numbers.
+ */
+pub fn problem_0004(x: u32, y: u32) -> u32 {
+    // The number n we're interested in typically has the following structure:
+    // - for 2-digit numbers forming it:
+    //       1000*a + 100*b + 10*b + a = 1001*a + 110*b
+    //     = 11*(91*a + 10*b)
+    //     = 11*(13*7*a + 5*2*b)
+    // - for 3-digit numbers forming it:
+    //       100000*a + 10000*b + 1000*c + 100*c + 10*b + a
+    //     = 100001*a + 10010*b + 1100*c
+    //     = 11*(9091*a + 910*b + 100*c)
+    //     = 11*(9091*a + 13*7*5*2*b + 5*5*2*2*c)
+    // hence n must be divisible by 11.
+    // This helps reduce the search space, and the number of calls to is_palindrome.
+    return (x - x / 10..x)
+        .cartesian_product(y - y / 10..y)
+        .map(|(a, b)| a * b)
+        .filter(|x| x % 11 == 0)
+        .filter(|x| is_palindrome(x))
+        .max()
+        .unwrap();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -89,5 +120,11 @@ mod tests {
     fn test_problem_0003() {
         assert_eq!(problem_0003(13_195), 29);
         assert_eq!(problem_0003(600_851_475_143), 6857);
+    }
+
+    #[test]
+    fn test_problem_0004() {
+        assert_eq!(problem_0004(100, 100), 9009);
+        assert_eq!(problem_0004(1000, 1000), 906609);
     }
 }

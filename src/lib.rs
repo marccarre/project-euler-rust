@@ -7,6 +7,7 @@ mod numbers;
 use iterators::Fibonacci;
 use iterators::Primes;
 use itertools::Itertools;
+use num::integer;
 use num_integer::Integer;
 use numbers::is_palindrome;
 use std::cmp;
@@ -102,6 +103,15 @@ pub fn problem_0004(x: u32, y: u32) -> u32 {
         .unwrap();
 }
 
+/**
+ * Problem 5: Smallest multiple
+ * 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+ * What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+ */
+pub fn problem_0005(n: u32) -> u32 {
+    (1..n).fold(1, |x, y| integer::lcm(x, y))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -126,5 +136,11 @@ mod tests {
     fn test_problem_0004() {
         assert_eq!(problem_0004(100, 100), 9009);
         assert_eq!(problem_0004(1000, 1000), 906609);
+    }
+
+    #[test]
+    fn test_problem_0005() {
+        assert_eq!(problem_0005(10), 2520);
+        assert_eq!(problem_0005(20), 232792560);
     }
 }

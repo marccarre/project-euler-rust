@@ -10,6 +10,7 @@ use itertools::Itertools;
 use num::integer;
 use num_integer::Integer;
 use numbers::is_palindrome;
+use numbers::is_prime;
 use std::cmp;
 
 /**
@@ -123,6 +124,25 @@ pub fn problem_0006(n: u32) -> u32 {
     (1..=n).sum::<u32>().pow(2) - (1..=n).map(|x| x.pow(2)).sum::<u32>()
 }
 
+/**
+ * Problem 7: 10001st prime
+ * By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+ * What is the 10 001st prime number?
+ */
+pub fn problem_0007(n: u32) -> u32 {
+    let mut i = 0;
+    let mut rank = 0;
+    loop {
+        if is_prime(i) {
+            rank += 1;
+        }
+        if rank == n {
+            return i;
+        }
+        i += 1;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -159,5 +179,11 @@ mod tests {
     fn test_problem_0006() {
         assert_eq!(problem_0006(10), 2640);
         assert_eq!(problem_0006(100), 25164150);
+    }
+
+    #[test]
+    fn test_problem_0007() {
+        assert_eq!(problem_0007(6), 13);
+        assert_eq!(problem_0007(10001), 104743);
     }
 }

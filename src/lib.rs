@@ -5,6 +5,7 @@ mod iterators;
 mod numbers;
 
 use iterators::Fibonacci;
+use iterators::Integers;
 use iterators::Primes;
 use itertools::Itertools;
 use num::integer;
@@ -129,18 +130,8 @@ pub fn problem_0006(n: u32) -> u32 {
  * By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
  * What is the 10 001st prime number?
  */
-pub fn problem_0007(n: u32) -> u32 {
-    let mut i = 0;
-    let mut rank = 0;
-    loop {
-        if is_prime(i) {
-            rank += 1;
-        }
-        if rank == n {
-            return i;
-        }
-        i += 1;
-    }
+pub fn problem_0007(n: usize) -> u32 {
+    Integers::new().filter(|&k| is_prime(k)).nth(n - 1).unwrap()
 }
 
 #[cfg(test)]

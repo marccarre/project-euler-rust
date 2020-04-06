@@ -198,28 +198,11 @@ pub fn problem_0008(window_size: usize) -> u64 {
         1, 8, 8, 2, 6, 7, 0, 4, 2, 8, 2, 5, 2, 4, 8, 3, 6, 0, 0, 8, 2, 3, 2, 5, 7, 5, 3, 0, 4, 2,
         0, 7, 5, 2, 9, 6, 3, 4, 5, 0,
     ];
-    let mut max_product = 1;
-    let mut product = 1;
-    // Pointers to beginning and end of the "moving window" of digits to multiply:
-    let mut l = 0;
-    let mut r = 0;
-    while r < digits.len() {
-        if digits[r] == 0 {
-            // Re-initialise product and reset "moving window":
-            product = 1;
-            l = r + 1;
-        } else {
-            product *= digits[r];
-        }
-        r += 1;
-        if r - l == window_size + 1 {
-            // Remove the left-most digit from the "moving window" and from running product:
-            product /= digits[l];
-            l += 1;
-        }
-        max_product = cmp::max(max_product, product);
-    }
-    return max_product;
+    digits
+        .windows(window_size)
+        .map(|window| window.iter().fold(1u64, |product, &digit| product * digit))
+        .max()
+        .unwrap()
 }
 
 #[cfg(test)]

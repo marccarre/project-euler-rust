@@ -205,6 +205,25 @@ pub fn problem_0008(window_size: usize) -> u64 {
         .unwrap()
 }
 
+/**
+ * Problem 9: Special Pythagorean triplet
+ * A Pythagorean triplet is a set of three natural numbers, a < b < c, for which, a**2 + b**2 = c**2
+ * For example, 3**2 + 4**2 = 9 + 16 = 25 = 5**2.
+ * There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+ * Find the product abc.
+ */
+pub fn problem_0009(target_sum: u32) -> u32 {
+    for i in 1..target_sum / 2 {
+        for j in i + 1..target_sum / 2 {
+            let k = target_sum - i - j;
+            if j < k && i * i + j * j == k * k {
+                return i * j * k;
+            }
+        }
+    }
+    return 0;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -253,5 +272,11 @@ mod tests {
     fn test_problem_0008() {
         assert_eq!(problem_0008(4), 5832);
         assert_eq!(problem_0008(13), 23514624000);
+    }
+
+    #[test]
+    fn test_problem_0009() {
+        assert_eq!(problem_0009(12), 60);
+        assert_eq!(problem_0009(1000), 31875000);
     }
 }

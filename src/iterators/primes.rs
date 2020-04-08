@@ -4,10 +4,6 @@ pub struct Primes {
     i: usize,
 }
 
-fn sqrt(n: u64) -> usize {
-    (n as f64).sqrt() as usize
-}
-
 fn primes(bound: usize) -> Vec<bool> {
     let mut is_prime: Vec<bool> = vec![true; bound];
     is_prime[0] = false;
@@ -21,9 +17,9 @@ fn primes(bound: usize) -> Vec<bool> {
 }
 
 impl Primes {
-    pub fn new(n: u64) -> Primes {
+    pub fn new(n: usize) -> Primes {
         Primes {
-            is_prime: self::primes(self::sqrt(n) + 1),
+            is_prime: self::primes(n),
             i: 0,
         }
     }

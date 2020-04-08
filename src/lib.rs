@@ -60,7 +60,8 @@ pub fn problem_0002_functional(n: u32) -> u32 {
 pub fn problem_0003(n: u64) -> u64 {
     let mut k = n;
     let mut largest = 1;
-    let mut primes = Primes::new(n);
+
+    let mut primes = Primes::new(sqrt(n));
     loop {
         match primes.next() {
             Some(prime) => {
@@ -76,6 +77,10 @@ pub fn problem_0003(n: u64) -> u64 {
         }
     }
     return cmp::max(largest, k);
+}
+
+fn sqrt(n: u64) -> usize {
+    (n as f64).sqrt() as usize
 }
 
 /**
@@ -224,6 +229,15 @@ pub fn problem_0009(target_sum: u32) -> u32 {
     return 0;
 }
 
+/**
+ * Problem 10: Summation of primes
+ * The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+ * Find the sum of all the primes below two million.
+ */
+pub fn problem_0010(bound: usize) -> u64 {
+    Primes::new(bound).sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -278,5 +292,11 @@ mod tests {
     fn test_problem_0009() {
         assert_eq!(problem_0009(12), 60);
         assert_eq!(problem_0009(1000), 31875000);
+    }
+
+    #[test]
+    fn test_problem_0010() {
+        assert_eq!(problem_0010(10), 17);
+        assert_eq!(problem_0010(2_000_000), 142913828922);
     }
 }

@@ -28,3 +28,17 @@ pub fn is_prime(n: u32) -> bool {
 fn sqrt(n: u32) -> u32 {
     (n as f32).sqrt() as u32
 }
+
+pub fn num_divisors(n: u32) -> u32 {
+    let mut count = 0;
+    for i in 1..sqrt(n) + 1 {
+        if n % i == 0 {
+            if n / i == i {
+                count += 1; // perfect square.
+            } else {
+                count += 2;
+            }
+        }
+    }
+    return count;
+}

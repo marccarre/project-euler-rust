@@ -398,6 +398,48 @@ fn project_dir() -> PathBuf {
     project.to_owned()
 }
 
+/**
+ * Problem 14: Longest Collatz sequence
+ * The following iterative sequence is defined for the set of positive integers:
+ *
+ *   n → n/2 (n is even)
+ *   n → 3n + 1 (n is odd)
+ *
+ * Using the rule above and starting with 13, we generate the following sequence:
+ *
+ *   13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1
+ *
+ * It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms.
+ * Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.
+ *
+ * Which starting number, under one million, produces the longest chain?
+ * NOTE: Once the chain starts the terms are allowed to go above one million.
+ */
+pub fn problem_0014(upper_bound: usize) -> usize {
+    let mut collatz: Vec<usize> = vec![0; upper_bound];
+    (1..collatz.len())
+        .max_by_key(|&n| {
+            let mut k = n;
+            let mut count = 1;
+            while k != 1 {
+                if k % 2 == 0 {
+                    k = k / 2;
+                    count += 1;
+                } else {
+                    k = (3 * k + 1) / 2; // skip one iteration.
+                    count += 2;
+                }
+                if k < collatz.len() && collatz[k] != 0 {
+                    count += collatz[k] - 1; // avoid double-counting k.
+                    break;
+                }
+            }
+            collatz[n] = count;
+            count
+        })
+        .unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -474,5 +516,10 @@ mod tests {
     #[test]
     fn test_problem_0013() {
         assert_eq!(problem_0013(10), 5537376230);
+    }
+
+    #[test]
+    fn test_problem_0014() {
+        assert_eq!(problem_0014(1_000_000), 837799);
     }
 }

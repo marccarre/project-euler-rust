@@ -14,6 +14,9 @@ use numbers::is_palindrome;
 use numbers::is_prime;
 use numbers::num_divisors;
 use std::cmp;
+use std::env;
+use std::fs;
+use std::path::PathBuf;
 
 /**
  * Problem 1: Multiples of 3 and 5
@@ -347,6 +350,54 @@ pub fn problem_0012(max_divisors: u32) -> u32 {
         .unwrap()
 }
 
+/**
+ * Problem 13: Large sum
+ * Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+ */
+pub fn problem_0013(num_digits: usize) -> u64 {
+    let filepath = project_dir().join("tests/problem_0013.txt");
+    let file = fs::read_to_string(filepath).expect("Failed to read tests/problem_0013.txt");
+    let numbers: Vec<Vec<char>> = file
+        .lines()
+        .map(|line| line.to_string().chars().collect())
+        .collect();
+
+    const NUM_DIGITS: usize = 50;
+    const RADIX: u32 = 10;
+    let mut sum = Vec::new();
+    let mut carry: u32 = 0;
+    for i in 0..NUM_DIGITS {
+        let digits_sum = numbers
+            .iter()
+            .map(|num| num[NUM_DIGITS - i - 1])
+            .map(|c| c.to_digit(RADIX).unwrap())
+            .sum::<u32>()
+            + carry;
+        carry = digits_sum / 10;
+        let digit = digits_sum % 10;
+        sum.push(digit.to_string());
+    }
+    sum.push(carry.to_string());
+    return sum
+        .join("")
+        .chars()
+        .rev()
+        .take(num_digits)
+        .collect::<String>()
+        .parse::<u64>()
+        .unwrap();
+}
+
+fn project_dir() -> PathBuf {
+    // Test binary typically lives under: target/debug/deps/
+    let exe = env::current_exe().expect("Error returning this executable's filepath");
+    let deps = exe.parent().expect("Failed to access deps directory");
+    let debug = deps.parent().expect("Failed to access debug directory");
+    let target = debug.parent().expect("Failed to access target directory");
+    let project = target.parent().expect("Failed to access project directory");
+    project.to_owned()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -418,5 +469,10 @@ mod tests {
     fn test_problem_0012() {
         assert_eq!(problem_0012(5), 28);
         assert_eq!(problem_0012(500), 76576500);
+    }
+
+    #[test]
+    fn test_problem_0013() {
+        assert_eq!(problem_0013(10), 5537376230);
     }
 }

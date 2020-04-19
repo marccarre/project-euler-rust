@@ -42,3 +42,7 @@ pub fn num_divisors(n: u32) -> u32 {
     }
     return count;
 }
+
+pub fn choose(n: u64, k: u64) -> u64 {
+    (0..k).fold(1, |acc, i| acc * (n - i) / (i + 1))
+}

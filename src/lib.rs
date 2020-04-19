@@ -10,6 +10,7 @@ use iterators::Primes;
 use itertools::Itertools;
 use num::integer;
 use num_integer::Integer;
+use numbers::choose;
 use numbers::is_palindrome;
 use numbers::is_prime;
 use numbers::num_divisors;
@@ -440,6 +441,15 @@ pub fn problem_0014(upper_bound: usize) -> usize {
         .unwrap()
 }
 
+/**
+ * Problem 15: Lattice paths
+ * Starting in the top left corner of a 2×2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner.
+ * How many such routes are there through a 20×20 grid?
+ */
+pub fn problem_0015(n: u64, m: u64) -> u64 {
+    choose(n + m, n)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -521,5 +531,11 @@ mod tests {
     #[test]
     fn test_problem_0014() {
         assert_eq!(problem_0014(1_000_000), 837799);
+    }
+
+    #[test]
+    fn test_problem_0015() {
+        assert_eq!(problem_0015(2, 2), 6);
+        assert_eq!(problem_0015(20, 20), 137846528820);
     }
 }

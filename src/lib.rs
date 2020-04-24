@@ -450,6 +450,27 @@ pub fn problem_0015(n: u64, m: u64) -> u64 {
     choose(n + m, n)
 }
 
+/**
+ * Problem 16: Power digit sum
+ * 2**15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
+ * What is the sum of the digits of the number 2**1000?
+ */
+pub fn problem_0016(n: usize) -> u32 {
+    let mut digits = vec![1];
+    for _ in 0..n {
+        let mut carry = 0;
+        for i in 0..digits.len() {
+            let digit = 2 * digits[i] + carry;
+            carry = digit / 10;
+            digits[i] = digit % 10;
+        }
+        if carry > 0 {
+            digits.push(carry);
+        }
+    }
+    digits.iter().sum::<u32>()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -537,5 +558,11 @@ mod tests {
     fn test_problem_0015() {
         assert_eq!(problem_0015(2, 2), 6);
         assert_eq!(problem_0015(20, 20), 137846528820);
+    }
+
+    #[test]
+    fn test_problem_0016() {
+        assert_eq!(problem_0016(15), 26);
+        assert_eq!(problem_0016(1000), 1366);
     }
 }
